@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfSerializableFilterDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SerializableFilterDefinition>
+    <FilterName>RegexFilter</FilterName>
+    <SerializableOptions>
+      <SerializableOption>
+        <Name>SearchFor</Name>
+        <Value>asd</Value>
+        <Description>Regex pattern to match</Description>
+      </SerializableOption>
+      <SerializableOption>
+        <Name>ReplaceWith</Name>
+        <Value>dddd</Value>
+        <Description>Text to replace with</Description>
+      </SerializableOption>
+    </SerializableOptions>
+  </SerializableFilterDefinition>
+  <SerializableFilterDefinition>
+    <FilterName>RegexFilter</FilterName>
+    <SerializableOptions>
+      <SerializableOption>
+        <Name>SearchFor</Name>
+        <Value>asdasdasdd</Value>
+        <Description>Regex pattern to match</Description>
+      </SerializableOption>
+      <SerializableOption>
+        <Name>ReplaceWith</Name>
+        <Value>aaa</Value>
+        <Description>Text to replace with</Description>
+      </SerializableOption>
+    </SerializableOptions>
+  </SerializableFilterDefinition>
+</ArrayOfSerializableFilterDefinition>
