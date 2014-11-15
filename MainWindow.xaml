@@ -29,13 +29,19 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
-                                <Label Grid.Row="0" Grid.ColumnSpan="2" FontStyle="Italic" Content="{Binding FilePath }"></Label>
+                                <Label Grid.Row="0" Grid.ColumnSpan="2" FontStyle="Italic">
+                                    <TextBlock Text="{Binding FilePath }"/>
+                                </Label>
 
                                 <Label Grid.Row="1" Grid.Column="0" FontWeight="Bold">Name:</Label>
-                                <Label Grid.Row="1" Grid.Column="1" Content="{Binding OriginalName}"/>
+                                <Label Grid.Row="1" Grid.Column="1">
+                                    <TextBlock Text="{Binding OriginalName}"/>
+                                </Label> 
 
                                 <Label Grid.Row="2" Grid.Column="0" FontWeight="Bold">New Name:</Label>
-                                <Label Grid.Row="2" Grid.Column="1" Content="{Binding NewName}"/>
+                                <Label Grid.Row="2" Grid.Column="1">
+                                    <TextBlock Text="{Binding NewName}"/>
+                                </Label> 
 
                             </Grid>
                         </DataTemplate>

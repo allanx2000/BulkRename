@@ -47,7 +47,7 @@
                 <TextBox Grid.Row="0" Grid.Column="1" Name="PreviewInputTextBox" Text="{Binding PreviewInput, UpdateSourceTrigger=PropertyChanged}" />
                 
                 <Label Grid.Row="1" Grid.Column="0">Output:</Label>
-                <Label Grid.Row="1" Grid.Column="1" Content="{Binding PreviewOutput}"/>
+                <TextBox IsReadOnly="True" Grid.Row="1" Grid.Column="1" Text="{Binding PreviewOutput, Mode=OneWay}"/>
 
             </Grid>
         </GroupBox>
