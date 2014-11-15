@@ -42,7 +42,7 @@ namespace BulkRename
                 title: "Add Files", multiselect: true, followLinks: false);
 
             ofd.ShowDialog();
-            
+
             foreach (string file in ofd.FileNames)
             {
                 viewModel.AddFile(new FileViewModel(file));
@@ -63,10 +63,6 @@ namespace BulkRename
             {
                 viewModel.RemoveFile(f);
             }
-
-            /*if (viewModel.SelectedFile != null)
-            {
-            }*/
         }
 
         private void AddFilterButton_Click(object sender, RoutedEventArgs e)
@@ -100,7 +96,7 @@ namespace BulkRename
 
             if (ctrl != null)
                 return ctrl.DataContext as FilterDefinitionViewModel;
-            else 
+            else
                 return null;
         }
         private void MoveFilterDownButton_Click(object sender, RoutedEventArgs e)
@@ -125,6 +121,18 @@ namespace BulkRename
                 }
             }
         }
+
+        private void RemoveAllFiltersButton_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBoxFactory.ShowConfirmAsBool("Are you sure you want to delete ALL filters?", "Confirm Delete");
+
+            if (result)
+            {
+                viewModel.ClearFilters();
+            }
+
+        }
+
 
         private void RefreshNamesButton_Click(object sender, RoutedEventArgs e)
         {
@@ -154,7 +162,7 @@ namespace BulkRename
 
         private void DoRename()
         {
-            
+
 
             viewModel.UpdatePreviewNames();
 
@@ -175,7 +183,7 @@ namespace BulkRename
             if (fvm != null)
             {
                 var window = new FilterEditWindow(fvm.FilterDef);
-                
+
                 SetPreviewText(window);
 
                 window.ShowDialog();
@@ -240,7 +248,7 @@ namespace BulkRename
             {
                 viewModel.AddFilter(new FilterDefinitionViewModel(f.GetFilterDefinition()));
             }
-        
+
         }
 
     }
