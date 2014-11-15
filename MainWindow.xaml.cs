@@ -191,7 +191,7 @@ namespace BulkRename
         private void SetPreviewText(FilterEditWindow window)
         {
             if (viewModel.Files.Count > 0)
-                window.SetPreviewInputText(viewModel.Files[0].OriginalName);
+                window.SetPreviewInputText(viewModel.Files[0].NewName);
         }
 
         private void SaveFiltersButton_Click(object sender, RoutedEventArgs e)
