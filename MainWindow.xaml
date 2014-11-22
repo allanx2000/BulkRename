@@ -27,6 +27,7 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
                                 <Label Grid.Row="0" Grid.ColumnSpan="2" FontStyle="Italic">
@@ -41,8 +42,14 @@
                                 <Label Grid.Row="2" Grid.Column="0" FontWeight="Bold">New Name:</Label>
                                 <Label Grid.Row="2" Grid.Column="1">
                                     <TextBlock Text="{Binding NewName}"/>
-                                </Label> 
+                                </Label>
 
+                                <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Visibility="{Binding ErrorPanelVisibility}">
+                                    <Label FontWeight="Bold" Foreground="Red">Error:</Label>
+                                    <Label>
+                                        <TextBlock Text="{Binding ErrorMessage}"/>
+                                    </Label>
+                                </StackPanel>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

@@ -167,14 +167,39 @@ namespace BulkRename
             viewModel.UpdatePreviewNames();
 
             int ctr = 0;
+
+            List<FileViewModel> filesToRemove = new List<FileViewModel>();
+
+            bool hasErrors = false;
+
             foreach (FileViewModel file in viewModel.Files)
             {
-                File.Move(file.FilePath, file.NewFilePath);
-                ctr++;
+                try
+                {
+                    File.Move(file.FilePath, file.NewFilePath);
+                    
+                    file.RenameError = null;
+
+                    filesToRemove.Add(file);
+
+                    ctr++;
+                }
+                catch (Exception e)
+                {
+                    file.RenameError = e;
+                    hasErrors = true;
+                }
             }
 
-            viewModel.ClearFiles();
-            MessageBoxFactory.ShowInfo("Batch rename completed successfully. Renamed " + ctr + " files.", "Batch Rename Completed");
+            foreach (var f in filesToRemove)
+            {
+                viewModel.RemoveFile(f);
+            }
+
+            if (!hasErrors)
+                MessageBoxFactory.ShowInfo("Batch rename completed successfully. Renamed " + ctr + " files.", "Batch Rename Completed");
+            else
+                MessageBoxFactory.ShowError("Batch rename completed with errors. Renamed " + filesToRemove.Count + " files", "Batch Rename Completed With Errors");
         }
 
         private void EditFilterButton_Click(object sender, RoutedEventArgs e)

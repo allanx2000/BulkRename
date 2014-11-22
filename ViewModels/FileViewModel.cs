@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BulkRename.ViewModels
 {
@@ -77,6 +78,47 @@ namespace BulkRename.ViewModels
             get
             {
                 return Path.Combine(file.Directory.FullName, NewName);
+            }
+        }
+
+        private Exception renameException;
+
+        public Exception RenameError { 
+            get
+            {
+                return renameException;
+            }
+            set
+            {
+                renameException = value;
+
+                RaiseEvent("RenameError");
+                RaiseEvent("HasError");
+                RaiseEvent("ErrorMessage");
+                RaiseEvent("ErrorPanelVisibility");
+            }}
+
+        public bool HasError
+        {
+            get
+            {
+                return renameException != null;
+            }
+        }
+
+        public Visibility ErrorPanelVisibility
+        {
+            get
+            {
+                return HasError ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        public string ErrorMessage
+        {
+            get
+            {
+                return HasError ? renameException.Message : "";
             }
         }
     }
