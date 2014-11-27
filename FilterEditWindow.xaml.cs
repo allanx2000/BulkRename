@@ -28,68 +28,42 @@ namespace BulkRename
         {
             InitializeComponent();
 
-            Cancelled = true;
+            //Cancelled = true;
 
             this.DataContext = viewModel;
         }
-
-        //bool isEdit = false;
-
-        private FilterDefinition? existingFilter = null;
-
+        
         public FilterEditWindow(FilterDefinition existingFilter) : this()
         {
-            //isEdit = true;
-            this.existingFilter = existingFilter;
-
-            viewModel.FilterChanged+= viewModel_FilterChanged;
-
-            viewModel.SelectedFilter = existingFilter.FilterName;
+            viewModel.SetExistingFilter(existingFilter);
         }
+
         public void SetPreviewInputText(string text)
         {
             viewModel.PreviewInput = text;
         }
 
-        private void viewModel_FilterChanged(object sender, AbstractFilter filter)
-        {
-            Dictionary<string, string> kvs = new Dictionary<string, string>();
-            foreach (var o in existingFilter.Value.Options)
+        public bool Cancelled {
+            get
             {
-                kvs.Add(o.Name, o.Value);
+                return viewModel.Cancelled;
             }
-
-            foreach (OptionViewModel o in viewModel.CurrentOptions)
-            {
-                if (kvs.ContainsKey(o.Name))
-                    o.Value = kvs[o.Name];
-            }
-
-            viewModel.FilterChanged -= viewModel_FilterChanged;
         }
-
-
-        public bool Cancelled { get; private set; }
         
         public FilterDefinition GetFilterArgs()
         {
             return viewModel.GetFilterArgs();
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            Cancelled = true;
-            this.Close();
-        }
 
-        private void OKButton_Click(object sender, RoutedEventArgs e)
+        /*private void OKButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 //Validates the filter
                 GetFilterArgs();
 
-                Cancelled = false;
+                //Cancelled = false;
                 this.Close();
             }
             catch (Exception ex)
@@ -97,6 +71,6 @@ namespace BulkRename
                 MessageBoxFactory.ShowError(ex);
                 //MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
+        }*/
     }
 }

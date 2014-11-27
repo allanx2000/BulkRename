@@ -10,9 +10,11 @@ namespace BulkRename.ViewModels
 {
     public class OptionViewModel : ObservableClass
     {
+        
         private Option data;
-
         private int labelWidth = 100;
+        
+        #region Properties
         public int LabelWidth { 
             get
             {
@@ -69,6 +71,8 @@ namespace BulkRename.ViewModels
                 SetValue(value);
             }
         }
+        #endregion
+
 
         public void SetValue(string value)
         {

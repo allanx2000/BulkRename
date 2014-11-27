@@ -1,4 +1,5 @@
 ﻿<Window x:Class="BulkRename.FilterEditWindow"
+        x:Name="FEWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="FilterEditWindow" Height="300" Width="300">
@@ -53,8 +54,8 @@
         </GroupBox>
         
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Name="OKButton" Click="OKButton_Click">OK</Button>
-            <Button Name="CancelButton" Click="CancelButton_Click">Cancel</Button>
+            <Button Name="OKButton" Command="{Binding OKCommand}" CommandParameter="{Binding ElementName=FEWindow}" >OK</Button>
+            <Button Name="CancelButton" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=FEWindow}" >Cancel</Button>
         </StackPanel>
     </Grid>
 </Window>

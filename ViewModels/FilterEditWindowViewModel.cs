@@ -1,4 +1,5 @@
 ﻿using BulkRename.Filters;
+using Innouvous.Utils;
 using Innouvous.Utils.MVVM;
 using System;
 using System.Collections.Generic;
@@ -6,20 +7,41 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace BulkRename.ViewModels
 {
     public class FilterEditWindowViewModel : ObservableClass
     {
         private string selectedFilter;
-
-        public delegate void FilterChangedEventHandler(object sender, AbstractFilter filter);
-
-        public event FilterChangedEventHandler FilterChanged;
-
         private int criteriaWidth;
-
         private string previewInput;
+        private ObservableCollection<OptionViewModel> currentOptions = new ObservableCollection<OptionViewModel>();
+
+        public FilterEditWindowViewModel()
+        {
+            Cancelled = true;
+        }
+
+        public void SetExistingFilter(FilterDefinition filter)
+        {
+            this.SelectedFilter = filter.FilterName;
+            RaiseEvent("SelectedFilter");
+
+            this.currentOptions = new ObservableCollection<OptionViewModel>();
+
+            foreach (var o in filter.Options)
+            {
+                currentOptions.Add(new OptionViewModel(o));
+            }
+
+            RaiseEvent("CurrentOptions");
+
+        }
+
+        #region Properties
+
+        public bool Cancelled { get; private set; }
 
         public string PreviewInput
         {
@@ -32,7 +54,6 @@ namespace BulkRename.ViewModels
                 previewInput = value;
 
                 RaiseEvent("PreviewInput");
-
                 RaiseEvent("PreviewOutput");
             }
         }
@@ -41,7 +62,7 @@ namespace BulkRename.ViewModels
         {
             get
             {
-                if (!String.IsNullOrEmpty(selectedFilter))
+                if (!String.IsNullOrEmpty(selectedFilter) && !String.IsNullOrEmpty(PreviewInput))
                 {
                     try
                     {
@@ -56,31 +77,6 @@ namespace BulkRename.ViewModels
             }
         }
 
-
-        private AbstractFilter GetSelectedFilter()
-        {
-            return FilterFactory.GetFilter(selectedFilter);
-        }
-
-        private List<Option> GetOptions()
-        {
-            var options = CurrentOptions.Select(x => x.Data).ToList();
-
-            GetSelectedFilter().Validate(options);
-            
-            return options;
-        }
-
-        /// <summary>
-        /// Gets the FilterArg generated from the view. Throws exception on argument validation errors
-        /// </summary>
-        /// <returns></returns>
-        /// 
-        public FilterDefinition GetFilterArgs()
-        {
-            return new FilterDefinition(selectedFilter, GetOptions());
-        }
-
         public int CriteriaWidth
         {
             get
@@ -93,6 +89,7 @@ namespace BulkRename.ViewModels
                 RaiseEvent("CriteriaWidth");
             }
         }
+
         public string SelectedFilter
         {
             get
@@ -107,6 +104,99 @@ namespace BulkRename.ViewModels
                 RefreshCurrentOptions();
 
             }
+        }
+
+        public ObservableCollection<OptionViewModel> CurrentOptions
+        {
+            get
+            {
+                return currentOptions;
+            }
+        }
+
+        public List<string> Filters
+        {
+            get
+            {
+                var filters = FilterFactory.GetFilterNames();
+                filters.OrderBy(s => s).Reverse();
+
+                return filters.ToList();
+            }
+        }
+
+        #endregion
+
+        #region Commands
+
+        public ICommand OKCommand
+        {
+            get
+            {
+                return new CommandHelper(obj => DoOK(obj));
+            }
+        }
+
+        private void DoOK(object window)
+        {
+            var win = window as FilterEditWindow;
+            if (win == null)
+                return;
+
+            try
+            {
+                //Validates the filter
+                GetFilterArgs();
+
+                Cancelled = false;
+
+                win.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBoxFactory.ShowError(ex);
+                //MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public ICommand CancelCommand
+        {
+            get
+            {
+                return new CommandHelper(obj => DoCancel(obj)); 
+            }
+        }
+
+        private void DoCancel(object window)
+        {
+            (window as FilterEditWindow).Close();
+        }
+        
+        #endregion
+
+        /// <summary>
+        /// Gets the FilterArg generated from the view. Throws exception on argument validation errors
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        public FilterDefinition GetFilterArgs()
+        {
+            return new FilterDefinition(selectedFilter, GetOptions());
+        }
+
+
+        private AbstractFilter GetSelectedFilter()
+        {
+            return FilterFactory.GetFilter(selectedFilter);
+        }
+
+        private List<Option> GetOptions()
+        {
+            var options = CurrentOptions.Select(x => x.Data).ToList();
+
+            GetSelectedFilter().Validate(options);
+
+            return options;
         }
 
         private void RefreshCurrentOptions()
@@ -136,32 +226,6 @@ namespace BulkRename.ViewModels
             foreach (var o in currentOptions)
             {
                 o.LabelWidth = maxLength;
-            }
-
-            if (FilterChanged != null)
-            {
-                FilterChanged.Invoke(this, filter);
-            }
-
-        }
-
-        private ObservableCollection<OptionViewModel> currentOptions = new ObservableCollection<OptionViewModel>();
-        public ObservableCollection<OptionViewModel> CurrentOptions
-        {
-            get
-            {
-                return currentOptions;
-            }
-        }
-
-        public List<string> Filters
-        {
-            get
-            {
-                var filters = FilterFactory.GetFilterNames();
-                filters.OrderBy(s => s).Reverse();
-
-                return filters.ToList();
             }
         }
     }
