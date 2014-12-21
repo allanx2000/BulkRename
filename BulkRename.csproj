@@ -93,6 +93,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Filters\FilterDefinition.cs" />
+    <Compile Include="Filters\Option.cs" />
     <Compile Include="Filters\TrimFilter.cs" />
     <Compile Include="Serialization.cs" />
     <Compile Include="ViewModels\FilterEditWindowViewModel.cs" />

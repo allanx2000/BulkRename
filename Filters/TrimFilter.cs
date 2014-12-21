@@ -8,12 +8,18 @@ namespace BulkRename.Filters
     class TrimFilter : AbstractFilter
     {
         public const string NAME = "TrimFilter";
+
+        //Option Keys
+        private const string TrimChar = "TrimChar";
+        
+        /// <summary>
+        /// trims the specified character from a string
+        /// </summary>
         public TrimFilter() : base(NAME)
         {
 
         }
 
-        private const string TrimChar = "TrimChar";
         public override List<Option> GetOptions()
         {
             return new List<Option>()

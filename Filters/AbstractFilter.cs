@@ -6,32 +6,12 @@ using System.Threading.Tasks;
 
 namespace BulkRename.Filters
 {
-    public struct Option
-    {
-        public string Name {get; private set; }
-        public string Description {get; private set;}
-        public string Value {get; private set;}
-
-        public Option(string name, string description) :this()
-        {
-            Name = name;
-            Description = description;
-        }
-
-        private Option(string name, string description, string value) : this(name,description)
-        {
-            Value = value;
-        }
-
-        public Option SetValue(string value)
-        {
-            return new Option(Name, Description, value);
-        }
-    }
-
- 
     public abstract class AbstractFilter
     {
+        /// <summary>
+        /// Abstract class for filters that provides public methods and helper functions
+        /// </summary>
+        /// <param name="name">Name/ID of the filter</param>
         protected AbstractFilter(string name)
         {
             Name = name;
@@ -43,24 +23,58 @@ namespace BulkRename.Filters
             private set;
         }
         
+        /// <summary>
+        /// Validates the Filter Definition
+        /// 
+        /// Throws exception on errors
+        /// </summary>
+        /// <param name="args"></param>
         public void Validate(FilterDefinition args)
         {
             Validate(args.Options);
         }
 
-        public string DoFilter(string name, FilterDefinition args)
+        /// <summary>
+        /// Perform the filter on the input string
+        /// </summary>
+        /// <param name="inputString"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public string DoFilter(string inputString, FilterDefinition args)
         {
-            return DoFilter(name, args.Options);
+            return DoFilter(inputString, args.Options);
         }
         
         public abstract List<Option> GetOptions();
+
+        /// <summary>
+        /// Makes sure the options values are valid.
+        /// 
+        /// The implementation should throw an exception on any failures
+        /// </summary>
+        /// <param name="options"></param>
         public abstract void Validate(List<Option> options);
-        public abstract string DoFilter(string name, List<Option> options);
 
+        /// <summary>
+        /// Performs the actual filtering on a string; a chain of filters would call this one by one with the previous filter's output
+        /// </summary>
+        /// <param name="inputString">A file name or string to run the filter on</param>
+        /// <param name="options">Options used by the specific filter</param>
+        /// <returns></returns>
+        public abstract string DoFilter(string inputString, List<Option> options);
 
-        protected Option GetOption(List<Option> options, string TrimChar)
+        /// <summary>
+        /// Helper function to get the option of the specified name
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="optionName"></param>
+        /// <returns>The Option object including the (Option)Name, Description, and Value</returns>
+        protected Option GetOption(List<Option> options, string optionName)
         {
-            return options.First(x => x.Name == TrimChar);
+            return options.First(x => x.Name == optionName);
         }
     }
+
+   
+
 }

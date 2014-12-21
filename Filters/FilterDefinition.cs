@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace BulkRename.Filters
 {
-    
-
+    /// <summary>
+    /// Holds information used to initialize/save a filter
+    /// </summary>
     public struct FilterDefinition
     {
         public string FilterName { get; private set; }
@@ -24,10 +25,5 @@ namespace BulkRename.Filters
         {
             return FilterFactory.GetFilter(FilterName);
         }
-
-        /*public string GetDescription()
-        {
-            return null;
-        }*/
     }
 }

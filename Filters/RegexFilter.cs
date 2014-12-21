@@ -10,13 +10,19 @@ namespace BulkRename.Filters
     public class RegexFilter : AbstractFilter
     {
         public const string NAME = "RegexFilter";
+
+        //Option Keys
+        private const string SearchFor = "SearchFor";
+        private const string ReplaceWith = "ReplaceWith";
+
+        /// <summary>
+        /// Replaces a the Regex matches with a specific string
+        /// </summary>
         public RegexFilter() : base(NAME)
         {
 
         }
 
-        private const string SearchFor = "SearchFor";
-        private const string ReplaceWith = "ReplaceWith";
 
         private static List<Option> options = new List<Option>()
         {
@@ -39,16 +45,14 @@ namespace BulkRename.Filters
 
         public override string DoFilter(string name, List<Option> options)
         {
-            //TODO: make options into a dictionary
-
-            var searchFor = options.First(x => x.Name == SearchFor);
-            var replaceWith = options.First(x => x.Name == ReplaceWith);
+            Option searchFor = GetOption(options, SearchFor);
+            Option replaceWith = GetOption(options, ReplaceWith);
 
             Regex matcher = new Regex(searchFor.Value, RegexOptions.Singleline);
 
             var matches = matcher.Matches(name);
 
-            //Sort
+            //Sort the matches by index of match
             Dictionary<int, Match> matchDictionary = new Dictionary<int, Match>();
             foreach (Match m in matches)
             {
@@ -56,6 +60,7 @@ namespace BulkRename.Filters
             }
 
             //Replace all matches, in reverse orders
+            //This will keep the index of the next match unchanged
             foreach (int m in matchDictionary.Keys.OrderByDescending(x=>x))
             {
                 var match = matchDictionary[m];
