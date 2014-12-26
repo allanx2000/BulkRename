@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("BulkRename")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("innouvous Technologies")]
 [assembly: AssemblyProduct("BulkRename")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
