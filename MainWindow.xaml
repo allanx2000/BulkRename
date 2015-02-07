@@ -14,7 +14,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <ListBox Name="FilesListBox" ItemsSource="{Binding Files}" SelectionMode="Extended" SelectedItem="{Binding SelectedFile}" Grid.Row="0">
+                <ListBox AllowDrop="True" Drop="FilesListBox_Drop" Name="FilesListBox" ItemsSource="{Binding Files}" SelectionMode="Extended" SelectedItem="{Binding SelectedFile}" Grid.Row="0">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>

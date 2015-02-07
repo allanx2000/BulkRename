@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace BulkRename
@@ -177,7 +178,7 @@ namespace BulkRename
                 try
                 {
                     File.Move(file.FilePath, file.NewFilePath);
-                    
+
                     file.RenameError = null;
 
                     filesToRemove.Add(file);
@@ -254,18 +255,29 @@ namespace BulkRename
 
         private void SaveFilters(string file)
         {
-            XmlSerializer xmlser = new XmlSerializer(typeof(List<SerializableFilterDefinition>));
-
             List<SerializableFilterDefinition> filters = viewModel.Filters.Select(x => SerializableFilterDefinition.Create(x.FilterDef)).ToList();
+            XmlSerializer xmlser = new XmlSerializer(typeof(List<SerializableFilterDefinition>));
 
             xmlser.Serialize(new StreamWriter(file), filters);
         }
 
+        private List<SerializableFilterDefinition> GetFiltersXmlDeserializer(string filterFile)
+        {
+            XmlReaderSettings opt = new XmlReaderSettings()
+            {
+                IgnoreWhitespace = false,
+            };
+            XmlReader reader = XmlReader.Create(new StreamReader(filterFile), opt);
+
+            var xser = new XmlSerializer(typeof(List<SerializableFilterDefinition>));
+            
+            return (List<SerializableFilterDefinition>)xser.Deserialize(reader); ;
+        }
+
+
         private void LoadFilters(string file)
         {
-            XmlSerializer xmlser = new XmlSerializer(typeof(List<SerializableFilterDefinition>));
-
-            List<SerializableFilterDefinition> filters = (List<SerializableFilterDefinition>)xmlser.Deserialize(new StreamReader(file));
+            List<SerializableFilterDefinition> filters = GetFiltersXmlDeserializer(file);
 
             viewModel.ClearFilters();
 
@@ -274,6 +286,23 @@ namespace BulkRename
                 viewModel.AddFilter(new FilterDefinitionViewModel(f.GetFilterDefinition()));
             }
 
+        }
+
+        private void FilesListBox_Drop(object sender, DragEventArgs e)
+        {
+            try
+            {
+                var files = e.Data.GetData(DataFormats.FileDrop);
+
+                foreach (string f in files as string[])
+                {
+                    viewModel.AddFile(new FileViewModel(new FileInfo(f)));
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
     }
